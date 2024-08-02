@@ -1,0 +1,23 @@
+#include "../include/Utils.h"
+
+bool Utils::init_winsock() {
+    WSADATA wsaData;
+    int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if(iResult != 0){
+        //logging
+        return false;
+    }
+    return true;
+}
+
+bool cleanup_winsock(){
+    WSACleanup();
+}
+
+std::string socket_error_to_string(int error_code){
+    switch(error_code){
+        case WSANOTINITIALISED: return "WSANOTINITIALISED";
+        case WSAENETDOWN: return "WSAENETDOWN";
+        case WSAEADDRINUSE: return "WSAEADDRINUSE";
+    }
+}
