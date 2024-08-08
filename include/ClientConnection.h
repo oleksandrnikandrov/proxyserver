@@ -2,23 +2,24 @@
 #ifndef PROXY_CLIENTCONNECTION_H
 #define PROXY_CLIENTCONNECTION_H
 
-
 #include <winsock2.h>
 #include <string>
+#include <thread>
+#include <ws2tcpip.h>
+#include <memory>
 
-const int DEFAULT_BUFLEN = 4096;
-const int TARGET_PORT = 80;//default http port
+#include "RequestHandler.h"
+
+//const int DEFAULT_BUFLEN = 6144;
 
 class ClientConnection{
 public:
     ClientConnection(SOCKET socket);
     ~ClientConnection();
 
-    std::string receive_request();
-    void send_response(const std::string& response);
-
 private:
-    SOCKET client_socket;
+     SOCKET client_socket;
+     std::shared_ptr<RequestHandler> request_h;
 };
 
 #endif //PROXY_CLIENTCONNECTION_H

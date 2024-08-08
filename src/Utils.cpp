@@ -13,11 +13,3 @@ bool Utils::init_winsock() {
 bool cleanup_winsock(){
     WSACleanup();
 }
-
-std::string socket_error_to_string(int error_code){
-    switch(error_code){
-        case WSANOTINITIALISED: return "WSANOTINITIALISED";
-        case WSAENETDOWN: return "WSAENETDOWN";
-        case WSAEADDRINUSE: return "WSAEADDRINUSE";
-    }
-}

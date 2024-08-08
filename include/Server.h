@@ -11,6 +11,13 @@
 
 #include "ServerSocket.h"
 #include "ClientConnection.h"
+#include "TargetConnection.h"
+#include "Cache.h"
+
+enum class HandlingType{
+    BUFFERED,
+    STREAMING
+};
 
 class Server{
 
@@ -22,15 +29,11 @@ public:
     void stop();
 
 private:
-    int server_port;
     ServerSocket server_socket;
     std::vector<std::thread> threads;
     Cache cache;
 
     void handle_clients(std::shared_ptr<ClientConnection> client_connection);
-
-    bool running_;
-
 };
 
 #endif //PROXY_SERVER_H

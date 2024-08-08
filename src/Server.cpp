@@ -1,14 +1,15 @@
 #include "../include/Server.h"
 #include "../include/Utils.h"
+#include "../include/RequestHandler.h"
+#include "../include/ResponseHandler.h"
 
 //include "../include/Logger.h"
 
-Server::Server(const std::string& port, const std::string& ip)
-    : server_port(DEFAULT_PORT), server_socket(DEFAULT_PORT), running_(false){}
 
-Server::~Server() {
-    stop();
-}
+Server::Server(const std::string& port, const std::string& ip)
+    : server_socket(DEFAULT_SERVER_PORT){}
+
+Server::~Server() noexcept { stop(); }
 
 bool Server::start(){
     if(!Utils::init_winsock()){
@@ -26,12 +27,13 @@ bool Server::start(){
     while(true){
         SOCKET client_socket = server_socket.accept_client();
         if(client_socket == INVALID_SOCKET){
-            //logging
+            //logginga
             continue;
         }
 
         auto client_connection = std::make_shared<ClientConnection>(client_socket);
         threads.emplace_back(&Server::handle_clients, this, client_connection);
+
     }
 }
 
@@ -47,20 +49,19 @@ void Server::stop() {
 
 //to handle request from client and response them
 void Server::handle_clients(std::shared_ptr<ClientConnection> client_connection) {
-    std::string request = client_connection->receive_request();
+    std::string request_ready_to_send = client_connection->receive_request();
 
-    if(Cache.has_(request)){
-        std::string cached_response = Cache.get_(request);
-        client_connection->send_response(cached_response);
-    }
-    else{
-        RequestHandler request_handler;
-        ResponseHandler response_handler;
+    //TO DO: CACHING
 
-        std::string response = request_handler.handle_(request);
-        response = response_handler.handle_(response);
+    std::string host = ;
+    TargetConnection target_connection = TargetConnection(host);
 
-        cache.store(request, response);
-        client_connection->send_response(response);
-    }
+    //std::string response = handle_target(target_connection, request_ready_to_send);
+    //client_connection->send_response(response);
+
+}
+
+std::string Server::handle_target(TargetConnection target_connection, const std::string& request){
+    target_connection.send_request(request);
+    return target_connection.receive_response();
 }

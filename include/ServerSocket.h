@@ -2,8 +2,9 @@
 #define SERVER_SOCKET_H
 
 #include <winsock2.h>
+#include <ws2tcpip.h>
 
-const int DEFAULT_PORT = 8080;
+const int DEFAULT_SERVER_PORT = 8080;
 
 class ServerSocket {
 public:
